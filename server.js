@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const morgan = require('morgan')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
@@ -60,7 +61,8 @@ app.use((req, res, next) => {
 
 // register passport authentication middleware
 app.use(auth)
-
+app.use(morgan('comined'))
+app.use(cors())
 // add `bodyParser` middleware which will parse JSON requests into
 // JS objects before they reach the route files.
 // The method `.use` sets up middleware for the Express application
