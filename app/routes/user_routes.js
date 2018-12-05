@@ -31,24 +31,34 @@ router.post('/sign-up', (req, res) => {
   // let obj = JSON.parse(req)
   // console.log(obj)
   // start a promise chain, so that any errors will pass to `handle`
-  Promise.resolve(req.body.credentials)
+  Promise.resolve(req.body)
   // console.log(credentials)
   // console.log(req.body.credentials)
     // reject any requests where `credentials.password` is not present, or where
     // the password is an empty string
-    .then(credentials => {
-      if (!credentials ||
-          !credentials.password ||
-          credentials.password !== credentials.password_confirmation) {
+    .then(body => {
+      console.log(body)
+      if (!body.password ||
+          body.password !== body.password_confirmation) {
         throw new BadParamsError()
       }
     })
     // generate a hash from the provided password, returning a promise
-    .then(() => bcrypt.hash(req.body.credentials.password, bcryptSaltRounds))
+    // let hash = bcrypt.hash(req.body.password, bcryptSaltRounds)
+    // console.log(hash)
+    .then(() => bcrypt.hash(req.body.password, bcryptSaltRounds))
+    // bcrypt.hash(req.body.password, bcryptSaltRounds, function(err, hash) {
+    //   return {
+    //     name: req.body.name,
+    //     email: req.body.email,
+    //     hashedPassword: hash
+    //   }
+    // })
     .then(hash => {
       // return necessary params to create a user
       return {
-        email: req.body.credentials.email,
+        name: req.body.name,
+        email: req.body.email,
         hashedPassword: hash
       }
     })
