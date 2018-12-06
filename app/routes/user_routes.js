@@ -74,14 +74,6 @@ router.post('/sign-up', (req, res) => {
 // SIGN IN
 // POST /sign-in
 router.post('/sign-in', (req, res) => {
-  // Promise.resolve(req.body)
-  // .then(req => {
-  //   return {
-  //     pw: req.body.password,
-  //     email: req.body.email
-  //   }
-  // })
-  // console.log(req)
   const pw = req.body.password
   let user
 
@@ -152,6 +144,7 @@ router.patch('/change-password', requireToken, (req, res) => {
 })
 
 router.delete('/sign-out', requireToken, (req, res) => {
+  console.log('you are running this equation')
   // create a new random token for the user, invalidating the current one
   req.user.token = crypto.randomBytes(16)
   // save the token and respond with 204
@@ -159,9 +152,5 @@ router.delete('/sign-out', requireToken, (req, res) => {
     .then(() => res.sendStatus(204))
     .catch(err => handle(err, res))
 })
-
-// router.get('/get', requireToken, (req, res) => {
-
-// })
 
 module.exports = router
