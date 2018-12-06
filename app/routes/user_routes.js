@@ -25,9 +25,9 @@ const router = express.Router()
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res) => {
-  console.log('this is the req.body.name ' + req.body.name)
-  console.log('This is the req ' + req)
-  console.log('This is req.body ' + req.body)
+  // console.log('this is the req.body.name ' + req.body.name)
+  // console.log('This is the req ' + req)
+  // console.log('This is req.body ' + req.body)
   // let obj = JSON.parse(req)
   // console.log(obj)
   // start a promise chain, so that any errors will pass to `handle`
@@ -37,7 +37,7 @@ router.post('/sign-up', (req, res) => {
     // reject any requests where `credentials.password` is not present, or where
     // the password is an empty string
     .then(body => {
-      console.log(body)
+      // console.log(body)
       if (!body.password ||
           body.password !== body.password_confirmation) {
         throw new BadParamsError()
@@ -74,11 +74,19 @@ router.post('/sign-up', (req, res) => {
 // SIGN IN
 // POST /sign-in
 router.post('/sign-in', (req, res) => {
-  const pw = req.body.credentials.password
+  // Promise.resolve(req.body)
+  // .then(req => {
+  //   return {
+  //     pw: req.body.password,
+  //     email: req.body.email
+  //   }
+  // })
+  // console.log(req)
+  const pw = req.body.password
   let user
 
   // find a user based on the email that was passed
-  User.findOne({ email: req.body.credentials.email })
+  User.findOne({ email: req.body.email })
     .then(record => {
       // if we didn't find a user with that email, send 422
       if (!record) {
@@ -151,5 +159,9 @@ router.delete('/sign-out', requireToken, (req, res) => {
     .then(() => res.sendStatus(204))
     .catch(err => handle(err, res))
 })
+
+// router.get('/get', requireToken, (req, res) => {
+
+// })
 
 module.exports = router
