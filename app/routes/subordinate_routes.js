@@ -115,26 +115,29 @@ router.post('/subordinates', requireToken, (req, res) => {
 router.patch('/subordinates/:id', requireToken, (req, res) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
-  delete req.body.subordinate.owner
+  console.log(req.body)
+  console.log(req.body.params._id)
+  delete req.body.owner
 
-  Subordinate.findById(req.params.id)
+  Subordinate.findById(req.body.params._id)
     .then(handle404)
     .then(subordinate => {
       // pass the `req` object and the Mongoose record to `requireOwnership`
       // it will throw an error if the current user isn't the owner
       requireOwnership(req, subordinate)
-
+      console.log('this is your req.body.params._id' + req.body.params._id)
+      console.log('this is your subordinate' + subordinate)
       // the client will often send empty strings for parameters that it does
       // not want to update. We delete any key/value pair where the value is
       // an empty string before updating
-      Object.keys(req.body.subordinate).forEach(key => {
-        if (req.body.subordinate[key] === '') {
-          delete req.body.subordinate[key]
+      Object.keys(req.body.params).forEach(key => {
+        if (req.body.params[key] === '') {
+          delete req.body.params[key]
         }
       })
 
       // pass the result of Mongoose's `.update` to the next `.then`
-      return subordinate.update(req.body.subordinate)
+      return subordinate.update(req.body.params)
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
