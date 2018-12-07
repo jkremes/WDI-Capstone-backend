@@ -35,10 +35,19 @@ router.get('/subordinates', requireToken, (req, res) => {
   Subordinate.find()
     // .then(console.log(subordinates))
     .then(subordinates => {
+      const troopsByOwner = subordinates.filter(subordinate => {
+        // console.log(adventure.owner)
+        // console.log('whoa')
+        if (subordinate.owner == req.user.id) {
+          // console.log('you are running the successfull double equals')
+          // troopsByOwner.push('you pushed something')
+          return true
+        }
+      })
       // `subordinates` will be an array of Mongoose documents
       // we want to convert each one to a POJO, so we use `.map` to
       // apply `.toObject` to each one
-      return subordinates.map(subordinate => subordinate.toObject())
+      return troopsByOwner.map(subordinate => subordinate.toObject())
     })
     // respond with status 200 and JSON of the subordinates
     .then(subordinates => res.status(200).json({ subordinates: subordinates }))
