@@ -115,8 +115,6 @@ router.post('/sign-in', (req, res) => {
 // PATCH /change-password
 router.patch('/change-password', requireToken, (req, res) => {
   let user
-  console.log(req.body.old_password)
-  console.log(req.body.new_password)
   // `req.user` will be determined by decoding the token payload
   User.findById(req.user.id)
     // save user outside the promise chain
@@ -146,7 +144,6 @@ router.patch('/change-password', requireToken, (req, res) => {
 })
 
 router.delete('/sign-out', requireToken, (req, res) => {
-  console.log('you are running this equation')
   // create a new random token for the user, invalidating the current one
   req.user.token = crypto.randomBytes(16)
   // save the token and respond with 204
